@@ -1,20 +1,25 @@
 import React, { useState } from "react";
-import "./SignIn.scss";
 import FormInput from "../form-input/FormInput";
 import CustomButton from "../custom-button/CustomButton";
+import { signInWithGoogle } from "../../firebase/firebase.utils";
 
-const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import "./SignIn.scss";
+
+const SignIn = props => {
+  const [userCredentials, setCredentials] = useState({
+    email: "",
+    password: ""
+  });
+
+  const { email, password } = userCredentials;
 
   const handleSubmit = e => {
     e.preventDefault();
-    setEmail(e.target.value);
-    setPassword(e.target.value);
   };
 
   const handleChange = e => {
-    // const [value, name] = e.target;
+    const { value, name } = e.target;
+    setCredentials({ ...userCredentials, [name]: value });
   };
   return (
     <div className="sign-in">
@@ -37,7 +42,12 @@ const SignIn = () => {
           onChange={handleChange}
           required
         />
-        <CustomButton type="submit">Sign In</CustomButton>
+        <div className="buttons">
+          <CustomButton type="submit"> Sign in </CustomButton>
+          <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
+            Sign in with Google
+          </CustomButton>
+        </div>
       </form>
     </div>
   );
